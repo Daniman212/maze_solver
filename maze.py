@@ -11,20 +11,20 @@ class Maze:
         self._num_cols = num_cols
         self._cell_size_x = cell_size_x
         self._cell_size_y = cell_size_y
-        self._win = win  # Optional window for graphical rendering
+        self._win = win  # Optional window for boxy box window
 
         if seed is not None:
-            random.seed(seed)  # Allows for repeatable mazes
+            random.seed(seed)  # Random-Ass without seed
 
         self._cells = []
         self._create_cells()
 
         if self._num_cols > 0 and self._num_rows > 0:
             self._break_entrance_and_exit()
-            self._break_walls_r(0, 0)  # Generate the maze using DFS
+            self._break_walls_r(0, 0)  # Generate the maze at dem zeros
             self._reset_cells_visited()
 
-        self._reset_cells_visited()  # Ensure visited property is reset before solving
+        self._reset_cells_visited()  # Reset Visiting checker
 
     def _create_cells(self):
         """Creates a grid of cells before drawing."""
@@ -82,7 +82,7 @@ class Maze:
         if j < self._num_rows - 1 and not self._cells[i][j + 1].visited:  # Down
             directions.append((0, 1, "bottom"))
 
-        random.shuffle(directions)  # Randomize traversal order
+        random.shuffle(directions)  # Randomize dat order
 
         for di, dj, direction in directions:
             ni, nj = i + di, j + dj
@@ -106,7 +106,7 @@ class Maze:
                 self._draw_cell(i, j)
                 self._draw_cell(ni, nj)
 
-                # Recursively break walls from the new cell
+                # Recursively (lame) break walls from the new cell
                 self._break_walls_r(ni, nj)
 
     def _reset_cells_visited(self):
@@ -125,7 +125,7 @@ class Maze:
         self._animate()  # Visualize each step
 
         if cell.visited:
-            return False  # Already visited, don't revisit
+            return False  # Already visited, don't do that shit again
 
         cell.visited = True  # Mark this cell as visited
 
@@ -144,14 +144,14 @@ class Maze:
         for di, dj, wall in directions:
             ni, nj = i + di, j + dj  # New coordinates
 
-            if 0 <= ni < self._num_cols and 0 <= nj < self._num_rows:  # Stay within bounds
+            if 0 <= ni < self._num_cols and 0 <= nj < self._num_rows:  # Stay within dem walls
                 neighbor = self._cells[ni][nj]
 
                 # Move if there's no wall blocking the path and the neighbor isn't visited
                 if not neighbor.visited and not getattr(cell, f"has_{wall}_wall"):
                     cell.draw_move(neighbor)  # Draw the movement
 
-                    if self._solve_r(ni, nj):  # Recursively solve
+                    if self._solve_r(ni, nj):  # Recursively (lame) solve
                         return True  # If solved, stop exploring
 
                     cell.draw_move(neighbor, undo=True)  # Undo move if dead-end
